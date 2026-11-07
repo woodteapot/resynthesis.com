@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resynthesis</title>
+<meta name="description" content="The Resynthesis Programme. Regenerative synthesis, conducted in confidence. A work of fiction.">
+<style>
+:root {
+  --paper: #f4f6f2;
+  --paper-2: #e8ece6;
+  --ink: #16201c;
+  --dim: #55635c;
+  --rule: #c9d2cb;
+  --mint: #0f8a6a;
+  --alarm: #c4361f;
+  --bar: #16201c;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, "Courier New", monospace;
+  --sans: "Helvetica Neue", Arial, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0c1210; --paper-2: #131b18; --ink: #e3ebe6; --dim: #97a69e;
+    --rule: #26332d; --mint: #3fd4a6; --alarm: #ff6a52; --bar: #e3ebe6;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.6 var(--sans); }
+a { color: var(--mint); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--alarm); outline-offset: 3px; }
+.wrap { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 max(16px, 4vw); }
+.strip {
+  background: var(--alarm); color: #fff; text-align: center; padding: 6px 16px;
+  font: 700 0.72rem/1.4 var(--mono); letter-spacing: 0.16em; text-transform: uppercase;
+}
+section { padding: clamp(52px, 8vw, 88px) 0; border-top: 1px solid var(--rule); scroll-margin-top: 44px; }
+.label { margin: 0 0 10px; color: var(--mint); font: 700 0.76rem/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; }
+h1, h2, h3 { font-weight: 300; letter-spacing: -0.01em; }
+h2 { margin: 0 0 18px; font-size: clamp(2rem, 5.5vw, 3.2rem); line-height: 1.05; }
+h3 { margin: 0 0 6px; font-size: 1.2rem; font-weight: 600; }
+.lede { max-width: 44rem; margin: 0 0 30px; }
+.redact { background: var(--bar); color: transparent; border-radius: 2px; user-select: none; padding: 0 0.2em; }
+.mono { font-family: var(--mono); font-size: 0.86em; }
+
+/* Hero */
+.hero { border-top: 0; padding: clamp(64px, 12vw, 132px) 0 clamp(48px, 8vw, 88px); position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(70% 70% at 70% 40%, #000, transparent 75%);
+}
+.hero .wrap { position: relative; }
+.ref { margin: 0 0 26px; color: var(--dim); font: 400 0.8rem/1.6 var(--mono); }
+.hero h1 { margin: 0 0 18px; font-size: clamp(3rem, 13vw, 8rem); line-height: 0.92; letter-spacing: -0.04em; }
+.hero h1 b { font-weight: 700; color: var(--mint); }
+.tag { max-width: 34rem; margin: 0 0 30px; font-size: clamp(1.15rem, 2.4vw, 1.4rem); }
+.helix { display: block; width: min(100%, 520px); height: 70px; }
+.helix path { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.helix .a { stroke: var(--mint); }
+.helix .b { stroke: var(--dim); }
+.helix line { stroke: var(--rule); stroke-width: 2; vector-effect: non-scaling-stroke; }
+
+nav { position: sticky; top: 0; z-index: 3; background: color-mix(in srgb, var(--paper) 94%, transparent); border-bottom: 1px solid var(--rule); }
+nav ul { display: flex; gap: 6px 22px; flex-wrap: wrap; margin: 0; padding: 12px 0; list-style: none;
+  font: 700 0.74rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+nav a { color: var(--ink); text-decoration: none; }
+nav a:hover { color: var(--mint); }
+
+/* Grids and cards */
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: 4px; padding: 22px; }
+.card .code { display: block; margin-bottom: 10px; color: var(--dim); font: 400 0.76rem/1.4 var(--mono); }
+.card p { margin: 8px 0 0; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.98rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--rule); }
+th { color: var(--dim); font: 700 0.72rem/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+td:first-child { font-family: var(--mono); font-size: 0.86rem; white-space: nowrap; }
+.status { font: 700 0.72rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.status.live { color: var(--mint); }
+.status.halt { color: var(--alarm); }
+@media (max-width: 680px) {
+  thead { display: none; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  tr { padding: 12px 0; border-bottom: 1px solid var(--rule); }
+  td { border: 0; padding: 3px 0; }
+}
+
+.memo { max-width: 46rem; background: var(--paper-2); border-left: 4px solid var(--alarm); padding: 22px 24px; font-family: var(--mono); font-size: 0.92rem; }
+.memo p { margin: 0 0 12px; }
+.memo p:last-child { margin: 0; }
+
+.notice { max-width: 44rem; margin-top: 28px; padding: 20px 22px; border: 1px dashed var(--rule); border-radius: 4px; }
+footer { border-top: 1px solid var(--rule); padding: 40px 0 56px; color: var(--dim); font-size: 0.92rem; }
+footer p { max-width: 46rem; margin: 0 0 10px; }
+@media (prefers-reduced-motion: no-preference) {
+  .helix .a { stroke-dasharray: 6 6; animation: drift 6s linear infinite; }
+  @keyframes drift { to { stroke-dashoffset: -120; } }
+}
+</style>
+</head>
+<body>
+
+<div class="strip">Restricted circulation · Consortium members only · This page does not exist</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="ref">REF RSX-0000-Ω · CLASSIFICATION: TIDEGLASS · REVISION 41 OF <span class="redact">00</span></p>
+    <h1>Re<b>synthesis</b></h1>
+    <p class="tag">Regenerative synthesis. What is lost can be remade, and what is remade can be improved. We are not permitted to tell you more, so we have told you this.</p>
+    <svg class="helix" viewBox="0 0 520 70" preserveAspectRatio="none" aria-hidden="true">
+      <path class="a" d="M0 35 C 32 0, 65 0, 97 35 S 162 70, 195 35 S 260 0, 292 35 S 357 70, 390 35 S 455 0, 520 35"/>
+      <path class="b" d="M0 35 C 32 70, 65 70, 97 35 S 162 0, 195 35 S 260 70, 292 35 S 357 0, 390 35 S 455 70, 520 35"/>
+      <line x1="48" y1="12" x2="48" y2="58"/><line x1="146" y1="12" x2="146" y2="58"/>
+      <line x1="243" y1="12" x2="243" y2="58"/><line x1="341" y1="12" x2="341" y2="58"/>
+      <line x1="438" y1="12" x2="438" y2="58"/>
+    </svg>
+  </div>
+</header>
+
+<nav aria-label="Sections">
+  <div class="wrap">
+    <ul>
+      <li><a href="#programme">Programme</a></li>
+      <li><a href="#concordat">Concordat</a></li>
+      <li><a href="#phases">Phases</a></li>
+      <li><a href="#site">Site Kestrel</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#participation">Participation</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<section id="programme">
+  <div class="wrap">
+    <p class="label">01 · The Programme</p>
+    <h2>A study with no end date, by design.</h2>
+    <p class="lede">The Resynthesis Programme began as a feasibility memo with eleven signatures and no budget line. It now has a budget line and no signatures, because every signatory has since been <span class="redact">regenerated</span> reassigned. Its single stated aim is to reverse the arrow of tissue: to take what has worn, torn or been forgotten and synthesise it back, better than the original and slightly ahead of schedule.</p>
+    <div class="grid">
+      <div class="card"><span class="code">AIM-1</span><h3>Restore</h3><p>Rebuild anything that once grew. Cartilage, enamel, the ability to sit cross-legged.</p></div>
+      <div class="card"><span class="code">AIM-2</span><h3>Revise</h3><p>Rebuild it with fewer flaws than the factory shipped. Version 2 of the human knee.</p></div>
+      <div class="card"><span class="code">AIM-3</span><h3>Remember</h3><p>Rebuild the things that never grew at all. This aim is discussed only on Thursdays.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="concordat">
+  <div class="wrap">
+    <p class="label">02 · The Concordat of Five</p>
+    <h2>Five companies. One table. No minutes.</h2>
+    <p class="lede">Resynthesis is underwritten by five pharmaceutical houses that, on paper, compete fiercely and have never met. Their annual reports describe vitamins, eye drops and a promising antacid. Their boards meet once a year, aboard a ship that is always being repainted.</p>
+    <div class="grid">
+      <div class="card"><span class="code">MEMBER I · FOUNDED 1931</span><h3>Paper Lamp Biologics</h3><p>Holds the original culture, a sample that has been dividing since before the war and refuses to stop. Keeper of the Ledger.</p></div>
+      <div class="card"><span class="code">MEMBER II · FOUNDED 1958</span><h3>Vellum Crane Pharmaceutical</h3><p>Officially makes bandages. Unofficially makes the skin that goes under them. Its logo is a crane folded from a single sheet with no cuts.</p></div>
+      <div class="card"><span class="code">MEMBER III · FOUNDED 1966</span><h3>Saltgate Meridian Life Sciences</h3><p>Supplies the seawater, filtered through nine depths of the trench. Nobody has asked why it must be that water. Nobody is going to.</p></div>
+      <div class="card"><span class="code">MEMBER IV · FOUNDED 1987</span><h3>Ninefold Tide Holdings</h3><p>A holding company that holds only the other four. Signs every cheque, attends no meeting, has a single employee whose badge reads "Auditor".</p></div>
+      <div class="card"><span class="code">MEMBER V · FOUNDED <span class="redact">0000</span></span><h3>Hollow Pearl Biotech</h3><p>Joined the Concordat in a year that has not happened yet. Its paperwork is impeccable. Its address is a number with no street.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="phases">
+  <div class="wrap">
+    <p class="label">03 · Trial Phases</p>
+    <h2>Phase I through Phase ∞.</h2>
+    <p class="lede">Conventional trials stop at Phase IV. The Concordat found this arbitrary.</p>
+    <table>
+      <thead><tr><th>Phase</th><th>Codename</th><th>Objective</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>I</td><td>Seedglass</td><td>Grow a fingernail on a glass slide. Achieved; the nail is now taller than the slide.</td><td><span class="status live">Complete</span></td></tr>
+        <tr><td>II</td><td>Kintsugi</td><td>Repair a broken bone so the seam is stronger than the bone. Seam visible under UV as faint gold.</td><td><span class="status live">Complete</span></td></tr>
+        <tr><td>III</td><td>Low Tide</td><td>Regenerate a full organ in salt water. The organ swims. Discussion ongoing.</td><td><span class="status live">Ongoing</span></td></tr>
+        <tr><td>IV</td><td>Second Spring</td><td>Reverse twenty years of wear in a single participant. Participant now insists on being called "the intern".</td><td><span class="status live">Ongoing</span></td></tr>
+        <tr><td>V</td><td>Quiet Room</td><td>Synthesise a memory the subject never had. Subject now fondly recalls a holiday in a country that does not exist.</td><td><span class="status halt">Suspended</span></td></tr>
+        <tr><td>VI</td><td>Mirror Lake</td><td><span class="redact">Synthesise the synthesiser.</span></td><td><span class="status halt">Do not ask</span></td></tr>
+        <tr><td>∞</td><td>Ouroboros</td><td>Close the loop. Results expected before the study began.</td><td><span class="status live">Pending, always</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="site">
+  <div class="wrap">
+    <p class="label">04 · Facility</p>
+    <h2>Site Kestrel.</h2>
+    <p class="lede">The work is carried out on a retired research platform somewhere in the waters of East Asia, registered to no flag and visible on no chart printed after 1974. Supply boats arrive on the new moon. The platform has seventeen decks above the water and an unconfirmed number below it.</p>
+    <div class="grid">
+      <div class="card"><span class="code">DECK 1</span><h3>Reception</h3><p>A single desk, a single plant, and a receptionist who has worked here since 1974 and looks thirty-one.</p></div>
+      <div class="card"><span class="code">DECK 9</span><h3>The Nursery</h3><p>Rows of warm tanks, faint humming, and a strict rule against naming anything that grows.</p></div>
+      <div class="card"><span class="code">DECK −4</span><h3>The Ledger Room</h3><p>Every result, written by hand, in an ink that slowly regenerates if you try to erase it.</p></div>
+      <div class="card"><span class="code">DECK <span class="redact">00</span></span><h3><span class="redact">The Deep Lab</span></h3><p><span class="redact">Access requires two keys and an apology.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="findings">
+  <div class="wrap">
+    <p class="label">05 · Findings</p>
+    <h2>Recovered memorandum.</h2>
+    <p class="lede">The following page was found folded inside a returned lab coat. It has been reproduced as found.</p>
+    <div class="memo">
+      <p>TO: All deck leads<br>FROM: Office of the Auditor<br>RE: Phase III, specimen 7 ("Gerald")</p>
+      <p>Specimen 7 has once again regenerated its own containment tank. The new tank is better than the old tank. Facilities would like to know where it is getting the glass.</p>
+      <p>Reminder that the Concordat does not use the word "immortal" in writing. Please use "indefinitely ongoing".</p>
+      <p>The vending machine on Deck 9 has begun regenerating snacks. This is not an approved study arm. Do not eat the second packet.</p>
+      <p>The board meets on the <span class="redact">fourteenth</span>. The ship is being repainted. Wear something you don't mind getting <span class="redact">resynthesised</span>.</p>
+    </div>
+  </div>
+</section>
+
+<section id="participation">
+  <div class="wrap">
+    <p class="label">06 · Participation</p>
+    <h2>We do not recruit.</h2>
+    <p class="lede">There is no application, no form and no mailing list. Participants are selected by a process that is reviewed annually and understood by nobody. If you have been selected you will know, because you will receive a single origami crane with no cuts, and your knees will feel unusually good for a week.</p>
+    <div class="notice">
+      <p class="label">Notice to the curious</p>
+      <p style="margin:0">Please do not look for Site Kestrel. It is not on the map, it is not in the phone book, and it is very tired of polite letters from people who found it anyway.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Resynthesis is fiction.</strong> The Programme, the Concordat, its five companies, Site Kestrel and everyone mentioned here are invented. Any resemblance to real companies, studies, places or people is coincidence.</p>
+    <p>Nothing on this page is medical or scientific advice, nothing is for sale, and nothing here collects any information about you.</p>
+    <p class="mono">resynthesis.com · REVISION 41 · INDEFINITELY ONGOING</p>
+  </div>
+</footer>
+
+</body>
+</html>
